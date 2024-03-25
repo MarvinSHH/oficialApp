@@ -7,12 +7,17 @@ import {
   TouchableOpacity,
   Modal,
   StyleSheet,
+  TextInput,
 } from "react-native";
+import { Dimensions } from "react-native";
+import { estilos } from "./Estilos";
+import { Icon } from "react-native-elements"; // Importa Icon de react-native-elements
 
 const ProductosPry = () => {
   const [productos, setProductos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [productoActual, setProductoActual] = useState({});
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     fetch("https://apibackend-one.vercel.app/api/productos")
@@ -21,6 +26,27 @@ const ProductosPry = () => {
       .catch((error) => console.error(error));
   }, []);
 
+  const buscarProducto = () => {
+    if (busqueda.trim() === "") {
+      // Si el campo de búsqueda está vacío, trae todos los productos nuevamente
+      fetch("https://apibackend-one.vercel.app/api/productos")
+        .then((response) => response.json())
+        .then((data) => setProductos(data))
+        .catch((error) => console.error(error));
+    } else {
+      // Busca productos por nombre
+      fetch(
+        `https://apibackend-one.vercel.app/api/productos/nombre/${busqueda}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Asumiendo que la respuesta es un array de productos encontrados
+          Array.isArray(data) ? setProductos(data) : setProductos([data]);
+        })
+        .catch((error) => console.error(error));
+    }
+  };
+
   const handleVerMas = (producto) => {
     setProductoActual(producto);
     setModalVisible(true);
@@ -28,9 +54,25 @@ const ProductosPry = () => {
 
   return (
     <View style={styles.container}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TextInput
+          style={estilos.inputBusqueda}
+          onChangeText={setBusqueda}
+          value={busqueda}
+          placeholder="Buscar producto..."
+          onSubmitEditing={buscarProducto} // Realiza la búsqueda cuando el usuario somete el formulario
+        />
+        <Icon // Agrega un Icono de búsqueda
+          name="search"
+          type="font-awesome"
+          style={{ marginRight: 10 }}
+          onPress={buscarProducto}
+        />
+      </View>
+
       <FlatList
         data={productos}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={({ item }) => (
           <View style={styles.producto}>
             <Image source={{ uri: item.ruta }} style={styles.imagen} />
@@ -38,9 +80,9 @@ const ProductosPry = () => {
             <Text style={styles.precio}>${item.precio}</Text>
             <TouchableOpacity
               onPress={() => handleVerMas(item)}
-              style={styles.verMas}
+              style={estilos.botonConBordeCentrado}
             >
-              <Text>Ver más</Text>
+              <Text style={estilos.textoBoton}>Ver detalles</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -51,22 +93,25 @@ const ProductosPry = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(!modalVisible)}
       >
-        <View style={styles.modalView}>
-          <Image
-            source={{ uri: productoActual.ruta }}
-            style={styles.modalImagen}
-          />
-          <Text style={styles.modalNombre}>{productoActual.nombre}</Text>
-          <Text style={styles.modalDescripcion}>
-            {productoActual.descripcion}
-          </Text>
-          <Text style={styles.modalPrecio}>${productoActual.precio}</Text>
-          <TouchableOpacity
-            style={styles.cerrarModal}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text style={styles.textoCerrarModal}>Cerrar</Text>
-          </TouchableOpacity>
+        {/* Contenedor para el overlay */}
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {/*} <Image
+              source={{ uri: productoActual.ruta }}
+              style={styles.modalImagen}
+        />*/}
+            <Text style={styles.modalNombre}>{productoActual.nombre}</Text>
+            <Text style={styles.modalDescripcion}>
+              {productoActual.descripcion}
+            </Text>
+            <Text style={styles.modalPrecio}>${productoActual.precio}</Text>
+            <TouchableOpacity
+              style={estilos.botonConBordeCentradoRojo}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={estilos.textoBoton}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -76,7 +121,8 @@ const ProductosPry = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    backgroundColor: "#daebff",
+    paddingTop: 20,
   },
   producto: {
     backgroundColor: "white",
@@ -84,10 +130,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     alignItems: "center",
+    borderRadius: 20,
   },
   imagen: {
-    width: 100,
-    height: 100,
+    width: 300,
+    height: 300,
   },
   nombre: {
     fontSize: 18,
@@ -104,7 +151,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   modalView: {
-    margin: 20,
+    marginTop: 200,
+    marginLeft: 20,
+    marginRight: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -119,8 +168,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalImagen: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     marginBottom: 15,
   },
   modalNombre: {

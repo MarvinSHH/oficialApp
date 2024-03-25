@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 const QuienesSomos = () => {
   const [empresa, setEmpresa] = useState(null);
@@ -23,32 +29,70 @@ const QuienesSomos = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Quiénes Somos</Text>
-      {empresa && (
-        <>
-          <Text>Descripción: {empresa.descripcion}</Text>
-          <Text>Misión: {empresa.mision}</Text>
-          <Text>Visión: {empresa.vision}</Text>
-          <Text>Valores: {empresa.valores}</Text>
-        </>
-      )}
-    </View>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.container}>
+        {empresa && (
+          <>
+            <Text style={styles.texto}>Descripción: {empresa.descripcion}</Text>
+          </>
+        )}
+      </View>
+      <View style={styles.container}>
+        {empresa && (
+          <>
+            <Text style={styles.texto}>Misión: {empresa.mision}</Text>
+          </>
+        )}
+      </View>
+      <View style={styles.container}>
+        {empresa && (
+          <>
+            <Text style={styles.texto}>Visión: {empresa.vision}</Text>
+          </>
+        )}
+      </View>
+      <View style={styles.container}>
+        {empresa && (
+          <>
+            <Text style={styles.texto}>Valores: {empresa.valores}</Text>
+          </>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: "#daebff",
+  },
   container: {
+    margin: 20,
     padding: 20,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    //minHeight: 300, // Establece una altura mínima para todas las cajas
   },
   titulo: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 20,
+    color: "#005f73",
   },
   texto: {
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 15,
+    lineHeight: 24,
+    color: "#001219",
   },
 });
 

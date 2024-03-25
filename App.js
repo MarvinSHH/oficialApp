@@ -2,11 +2,14 @@ import { StyleSheet, Text, View } from "react-native";
 import Home from "./Componentes/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { NavHome } from "./Componentes/Navegacion";
+import { UsuarioProvider } from "./Componentes/UsuarioContext"; // Importa el proveedor del contexto de usuario
 
 export default function App() {
   return (
     <NavigationContainer>
-      <NavHome />
+      <UsuarioProvider>
+        <NavHome />
+      </UsuarioProvider>
     </NavigationContainer>
   );
 }

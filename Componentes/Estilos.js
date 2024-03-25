@@ -1,5 +1,4 @@
-import { StyleSheet } from "react-native";
-
+import { ImageBackground, StyleSheet } from "react-native";
 export const estilos = StyleSheet.create({
   container: {
     flex: 1,
@@ -7,6 +6,7 @@ export const estilos = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  containeriot: {},
   //estilos del componente Bienvenida:
   containerBienvenida: {
     flex: 1,
@@ -14,6 +14,7 @@ export const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   textoBienvenidaTitulo: {
     fontSize: 80,
     fontWeight: "bold",
@@ -32,8 +33,8 @@ export const estilos = StyleSheet.create({
     width: 80,
   },
   imagen: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     marginBottom: 20,
   },
 
@@ -45,10 +46,20 @@ export const estilos = StyleSheet.create({
     height: "5%",
     width: "80%",
     textAlign: "center",
-    marginTop: 20,
+    marginBottom: 15,
     borderRadius: 20,
     backgroundColor: "#fff",
+
     //paddingStart: 20,
+  },
+  form: {
+    width: "80%",
+    maxWidth: 400,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 20,
   },
   //estilos de boton
   botonConBordeCentrado: {
@@ -57,6 +68,23 @@ export const estilos = StyleSheet.create({
     backgroundColor: "#00b4e6",
     borderRadius: 20,
     width: "40%",
+  },
+  botonConBordeCentradoRojo: {
+    margin: 30,
+    padding: 10,
+    backgroundColor: "#Ef5335",
+    borderRadius: 20,
+    width: "40%",
+  },
+  inputBusqueda: {
+    flex: 1, // Ajusta el ancho para que ocupe todo el espacio disponible
+    marginHorizontal: 12, // Cambia 'margin' a 'marginHorizontal' para agregar espacio horizontal
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderColor: "gray",
+    padding: 10,
+    borderRadius: 20,
   },
   textoBoton: {
     fontSize: 18,
@@ -120,4 +148,30 @@ export const estilos = StyleSheet.create({
     flexWrap: "wrap",
   },
   formulario: {},
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#FFF",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 20,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  modalOption: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  modalOptionText: {
+    fontSize: 16,
+    textAlign: "center",
+  },
 });

@@ -5,9 +5,11 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
+import { estilos } from "../Estilos";
 
 export const Registro = () => {
   const nav = useNavigation();
@@ -20,9 +22,34 @@ export const Registro = () => {
   const [preguntaRecuperacion, setPreguntaRecuperacion] =
     useState("colorFavorito");
   const [respuestaPregunta, setRespuestaPregunta] = useState("");
-  const [dispositivo, setDispositivo] = useState("");
+
+  const validarEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validarTelefono = (telefono) => {
+    return /^[0-9]{10}$/.test(telefono);
+  };
 
   const handleRegistro = () => {
+    if (!nombre || !apellido || !correo || !contraseña || !telefono) {
+      Alert.alert("Error", "Por favor, completa todos los campos.");
+      return;
+    }
+
+    if (!validarEmail(correo)) {
+      Alert.alert("Error", "Por favor, ingresa un correo electrónico válido.");
+      return;
+    }
+
+    if (!validarTelefono(telefono)) {
+      Alert.alert(
+        "Error",
+        "Por favor, ingresa un número de teléfono válido (10 dígitos)."
+      );
+      return;
+    }
+
     // Valida los campos aquí si es necesario
     const usuarioData = {
       nombre,
@@ -33,7 +60,6 @@ export const Registro = () => {
       tipo: "usuario", // Asegúrate de que este campo sea aceptado por tu API
       preguntaRecuperacion,
       respuestaPregunta,
-      dispositivo,
     };
 
     fetch("https://apibackend-one.vercel.app/api/usuarios", {
@@ -62,84 +88,77 @@ export const Registro = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Registro de usuario</Text>
+    <View style={estilos.containerBienvenida}>
+      <Text style={estilos.subtitulo}>Registro de usuario</Text>
       <View style={styles.form}>
-        <Text style={styles.label}>Nombre:</Text>
+        <Text>Nombre:</Text>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa tu nombre"
           value={nombre}
           onChangeText={setNombre}
         />
-        <Text style={styles.label}>Apellido:</Text>
+        <Text>Apellido:</Text>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa tu apellido"
           value={apellido}
           onChangeText={setApellido}
         />
-        <Text style={styles.label}>Email:</Text>
+        <Text>Email:</Text>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa tu email"
           value={correo}
           onChangeText={setCorreo}
           autoCompleteType="email"
           autoCapitalize="none"
         />
-        <Text style={styles.label}>Contraseña:</Text>
+        <Text>Contraseña:</Text>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa tu contraseña"
           value={contraseña}
           onChangeText={setContraseña}
           secureTextEntry={true}
         />
-        <Text style={styles.label}>Teléfono:</Text>
+        <Text>Teléfono:</Text>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa tu teléfono"
           value={telefono}
           onChangeText={setTelefono}
           maxLength={10}
-          keyboardType="phone-pad"
         />
-        <Text style={styles.label}> pregunta de recuperacion por:</Text>
+        <Text> pregunta de recuperacion por:</Text>
         <Picker
           selectedValue={preguntaRecuperacion}
           onValueChange={(itemValue, itemIndex) =>
             setPreguntaRecuperacion(itemValue)
           }
-          style={styles.input}
+          style={estilos.textinput}
         >
           <Picker.Item label="Color Favorito" value="colorFavorito" />
           <Picker.Item label="Nombre de Mascota" value="nombreMascota" />
           <Picker.Item label="Mejor Amigo" value="mejorAmigo" />
         </Picker>
         <TextInput
-          style={styles.input}
+          style={estilos.textinput}
           placeholder="Ingresa su respuesta"
           value={respuestaPregunta}
           onChangeText={setRespuestaPregunta}
           secureTextEntry={true}
         />
 
-        <Text style={styles.label}>Dispositivo:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingresa tu dispositivo"
-          value={dispositivo}
-          onChangeText={setDispositivo}
-          secureTextEntry={true}
-          maxLength={10}
-        />
-        <TouchableOpacity onPress={handleRegistro}>
-          <Text style={styles.loginButton}>Registrarse</Text>
+        <TouchableOpacity
+          style={estilos.botonConBordeCentrado}
+          onPress={handleRegistro}
+        >
+          <Text style={estilos.textoBoton}>Registrar</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nav.navigate("Login")}>
-          <Text style={styles.registerLink}>
-            ¿Ya tienes cuenta? Presiona aquí para iniciar sesión
+          <Text style={estilos.botonSimpleSinBordeCentrado}>
+            ¿Ya tienes cuenta?
           </Text>
         </TouchableOpacity>
       </View>
@@ -162,8 +181,13 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   form: {
-    width: "100%",
+    width: "80%",
     maxWidth: 400,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "gray",
+    borderWidth: 2,
+    borderRadius: 20,
   },
   label: {
     fontSize: 16,
