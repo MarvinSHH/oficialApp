@@ -9,9 +9,8 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-import { Dimensions } from "react-native";
 import { estilos } from "./Estilos";
-import { Icon } from "react-native-elements"; // Importa Icon de react-native-elements
+import { Icon } from "react-native-elements";
 
 const ProductosPry = () => {
   const [productos, setProductos] = useState([]);
@@ -20,30 +19,25 @@ const ProductosPry = () => {
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
+    fetchProductos();
+  }, []);
+
+  const fetchProductos = () => {
     fetch("https://apibackend-one.vercel.app/api/productos")
       .then((response) => response.json())
       .then((data) => setProductos(data))
       .catch((error) => console.error(error));
-  }, []);
+  };
 
-  const buscarProducto = () => {
-    if (busqueda.trim() === "") {
-      // Si el campo de búsqueda está vacío, trae todos los productos nuevamente
-      fetch("https://apibackend-one.vercel.app/api/productos")
-        .then((response) => response.json())
-        .then((data) => setProductos(data))
-        .catch((error) => console.error(error));
+  const handleBusqueda = (text) => {
+    setBusqueda(text);
+    if (text.trim() === "") {
+      fetchProductos();
     } else {
-      // Busca productos por nombre
-      fetch(
-        `https://apibackend-one.vercel.app/api/productos/nombre/${busqueda}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Asumiendo que la respuesta es un array de productos encontrados
-          Array.isArray(data) ? setProductos(data) : setProductos([data]);
-        })
-        .catch((error) => console.error(error));
+      const filteredProductos = productos.filter((producto) =>
+        producto.nombre.toLowerCase().includes(text.toLowerCase())
+      );
+      setProductos(filteredProductos);
     }
   };
 
@@ -57,16 +51,15 @@ const ProductosPry = () => {
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TextInput
           style={estilos.inputBusqueda}
-          onChangeText={setBusqueda}
+          onChangeText={handleBusqueda}
           value={busqueda}
           placeholder="Buscar producto..."
-          onSubmitEditing={buscarProducto} // Realiza la búsqueda cuando el usuario somete el formulario
         />
-        <Icon // Agrega un Icono de búsqueda
+        <Icon
           name="search"
           type="font-awesome"
           style={{ marginRight: 10 }}
-          onPress={buscarProducto}
+          onPress={() => handleBusqueda(busqueda)}
         />
       </View>
 
@@ -93,13 +86,8 @@ const ProductosPry = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(!modalVisible)}
       >
-        {/* Contenedor para el overlay */}
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            {/*} <Image
-              source={{ uri: productoActual.ruta }}
-              style={styles.modalImagen}
-        />*/}
             <Text style={styles.modalNombre}>{productoActual.nombre}</Text>
             <Text style={styles.modalDescripcion}>
               {productoActual.descripcion}
@@ -144,12 +132,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "green",
   },
-  verMas: {
-    marginTop: 10,
-    backgroundColor: "#0CB7F2",
-    padding: 10,
-    borderRadius: 5,
-  },
   modalView: {
     marginTop: 200,
     marginLeft: 20,
@@ -167,11 +149,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalImagen: {
-    width: 300,
-    height: 300,
-    marginBottom: 15,
-  },
   modalNombre: {
     fontSize: 22,
     fontWeight: "bold",
@@ -182,15 +159,6 @@ const styles = StyleSheet.create({
   modalPrecio: {
     fontSize: 18,
     color: "green",
-  },
-  cerrarModal: {
-    marginTop: 15,
-    backgroundColor: "lightcoral",
-    padding: 10,
-    borderRadius: 5,
-  },
-  textoCerrarModal: {
-    color: "white",
   },
 });
 

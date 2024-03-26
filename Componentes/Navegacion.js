@@ -23,6 +23,8 @@ import AcercaDe from "./AcercaDe";
 import CuentaUser from "./CuentaUser";
 import RecuperarContraseña from "./RecuperarContraseña";
 import RecuperarConstraseñaPregunta from "./RecuperarConstraseñaPregunta";
+import VerificarCodigo from "./VerificarCodigo";
+import EstablecerNuevaContraseña from "./EstablecerNuevaContraseña";
 
 const Stack = createNativeStackNavigator();
 const TabsH = createBottomTabNavigator();
@@ -61,6 +63,16 @@ export const NavHome = () => {
       <Stack.Screen
         name="RecuperarConstraseñaPregunta" // Agrega la pantalla RecuperarContraseña
         component={RecuperarConstraseñaPregunta}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="VerificarCodigo" // Agrega la pantalla RecuperarContraseña
+        component={VerificarCodigo}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EstablecerNuevaContraseña" // Agrega la pantalla RecuperarContraseña
+        component={EstablecerNuevaContraseña}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
