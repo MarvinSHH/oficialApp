@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Alert } from "react-native";
 import axios from "axios";
+import { ProgressBar, Colors } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AsyncStorage } from "react-native";
+
+import {
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 function Dispositivoiot() {
   const [dispositivos, setDispositivos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [bombaEstado, setBombaEstado] = useState({});
+  const [bombaEstado, setBombaEstado] = useState(
+    JSON.parse(localStorage.getItem("bombaEstado")) || {}
+  );
 
   useEffect(() => {
     fetchDispositivos();
@@ -23,15 +33,12 @@ function Dispositivoiot() {
         "https://apibackend-one.vercel.app/api/dispositivo/"
       );
       setDispositivos(response.data);
-      const storedBombaEstado = await AsyncStorage.getItem("bombaEstado");
-      if (!storedBombaEstado) {
+      if (!localStorage.getItem("bombaEstado")) {
         const estadoInicialBomba = response.data.reduce((acc, dispositivo) => {
           acc[dispositivo._id] = false;
           return acc;
         }, {});
         setBombaEstado(estadoInicialBomba);
-      } else {
-        setBombaEstado(JSON.parse(storedBombaEstado));
       }
     } catch (error) {
       console.error("Error al obtener dispositivos: ", error);
@@ -76,43 +83,11 @@ function Dispositivoiot() {
     return "cyan";
   };
 
-  const ProgressBar = ({ percentage, color }) => {
-    return (
-      <View
-        style={{
-          width: "100%",
-          backgroundColor: "#e0e0de",
-          borderRadius: 20,
-          marginVertical: 10,
-        }}
-      >
-        <View
-          style={{
-            height: "100%",
-            width: `${percentage}%`,
-            backgroundColor: color,
-            borderRadius: "inherit",
-            textAlign: "right",
-            transition: "width 0.6s ease-in-out",
-          }}
-        >
-          <Text
-            style={{
-              padding: 5,
-              color: "white",
-              fontWeight: "bold",
-            }}
-          >
-            {`${percentage}%`}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <View style={{ flex: 1, alignItems: "center", marginTop: 20 }}>
-      <Text>Control de Dispositivos IoT</Text>
+      <Text style={{ fontSize: 24, marginBottom: 10 }}>
+        Control de Dispositivos IoT
+      </Text>
       {dispositivos.map((dispositivo) => (
         <View
           key={dispositivo._id}
@@ -124,12 +99,14 @@ function Dispositivoiot() {
             borderRadius: 10,
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.8,
-            shadowRadius: 4,
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
             elevation: 5,
           }}
         >
-          <Text>{dispositivo.nombre}</Text>
+          <Text style={{ fontSize: 20, marginBottom: 10 }}>
+            {dispositivo.nombre}
+          </Text>
           <View
             style={{
               flexDirection: "row",
@@ -137,7 +114,16 @@ function Dispositivoiot() {
               marginBottom: 10,
             }}
           >
-            {/* Aquí irían los íconos y la barra de progreso para el nivel de alimento */}
+            <FontAwesome5
+              name="dog"
+              size={40}
+              color={getColorPorNivelAlimento(dispositivo.nivelAlimento)}
+            />
+            <ProgressBar
+              progress={dispositivo.nivelAlimento / 100}
+              color={getColorPorNivelAlimento(dispositivo.nivelAlimento)}
+              style={{ flex: 1, marginLeft: 10 }}
+            />
           </View>
 
           <View
@@ -147,7 +133,16 @@ function Dispositivoiot() {
               marginBottom: 10,
             }}
           >
-            {/* Aquí irían los íconos y la barra de progreso para el nivel de agua */}
+            <MaterialCommunityIcons
+              name="water-percent"
+              size={40}
+              color={getColorPorNivelAgua(dispositivo.nivelAgua)}
+            />
+            <ProgressBar
+              progress={dispositivo.nivelAgua / 100}
+              color={getColorPorNivelAgua(dispositivo.nivelAgua)}
+              style={{ flex: 1, marginLeft: 10 }}
+            />
           </View>
           <View
             style={{
@@ -163,7 +158,9 @@ function Dispositivoiot() {
             <Button
               onPress={() => toggleBomba(dispositivo._id)}
               title="Dar Agua"
-              color={bombaEstado[dispositivo._id] ? "green" : "black"}
+              color={
+                bombaEstado[dispositivo._id] ? Colors.green500 : Colors.black
+              }
             />
           </View>
         </View>

@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Carousel from "react-native-snap-carousel";
+import { estilos } from "./Estilos";
+import perro from "../assets/perro.jpg";
 import perro1 from "../assets/perro1.jpg";
 import perro2 from "../assets/perro2.jpg";
 import perro3 from "../assets/perro3.jpg";
 import perro4 from "../assets/perro4.jpg";
-
-import { estilos } from "./Estilos";
-import perro from "../assets/perro.jpg";
 
 const Home = () => {
   const [productoEstrella, setProductoEstrella] = useState(null);
@@ -28,8 +19,6 @@ const Home = () => {
     { uri: perro2 },
     { uri: perro3 },
     { uri: perro4 },
-
-    // Agrega más imágenes según necesites
   ];
 
   useEffect(() => {
@@ -45,8 +34,12 @@ const Home = () => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.itemCarrusel}>
-        <Image source={item.uri} style={styles.imagenCarrusel} />
+      <View style={estilos.itemCarrusel}>
+        <ImageBackground source={item} style={estilos.imagenCarrusel}>
+          <Text style={estilos.textoCarrusel}>
+            Producto Estrella {index + 1}
+          </Text>
+        </ImageBackground>
       </View>
     );
   };
@@ -61,10 +54,17 @@ const Home = () => {
 
   return (
     <ImageBackground source={perro} style={estilos.containerBienvenida}>
-      <Text style={estilos.titulo}>Producto Estrella</Text>
-      <Image source={{ uri: productoEstrella.ruta }} style={estilos.imagen} />
-      <Text style={estilos.subtitulo}>{productoEstrella.nombre}</Text>
-      <Text style={estilos.precio}>{`$${productoEstrella.precio}`}</Text>
+      <Text style={estilos.titulo}>Productos Destacados</Text>
+      <Carousel
+        data={imagenesCarrusel}
+        renderItem={renderItem}
+        sliderWidth={300}
+        itemWidth={300}
+        layout="default"
+        loop={true}
+        autoplay={true}
+        autoplayInterval={5000}
+      />
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("Productos", {

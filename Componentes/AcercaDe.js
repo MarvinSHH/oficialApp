@@ -15,7 +15,7 @@ export class AcercaDe extends Component {
           <Text style={styles.texto}>
             Los integrantes del equipo de desarrollo son:
           </Text>
-          <Text style={styles.texto}>- Marvin Tristan Sanjuan Hernandez</Text>
+          <Text style={styles.texto}>- Marvin Tristan Sanjuan Hernandezz</Text>
           <Text style={styles.texto}>- Carlos Daniel Padilla Espinoza</Text>
           <Text style={styles.texto}>- Carlos Daniel Hernandez Hernandez</Text>
           <Text style={styles.texto}>- Eulogio Medina Félix</Text>

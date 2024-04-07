@@ -14,6 +14,12 @@ export const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  contenedorBoton: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: 20, // Ajusta el margen inferior según tu preferencia
+  },
 
   textoBienvenidaTitulo: {
     fontSize: 80,
@@ -36,6 +42,11 @@ export const estilos = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 20,
+  },
+  contenedorMensaje: {
+    backgroundColor: "rgba(255, 255, 255, 0.7)", // Fondo semi-transparente
+    borderRadius: 10, // Bordes redondeados
+    padding: 20, // Espaciado interno
   },
 
   //estilos del componente Login:
@@ -173,5 +184,24 @@ export const estilos = StyleSheet.create({
   modalOptionText: {
     fontSize: 16,
     textAlign: "center",
+  },
+  itemCarrusel: {
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imagenCarrusel: {
+    width: 300,
+    height: 200,
+    borderRadius: 10,
   },
 });

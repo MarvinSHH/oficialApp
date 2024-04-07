@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./Home";
 import { Calculadora } from "./Calculadora";
 import Carrito from "./Carrito";
-import Iot from "./Iot";
+import Dispositivoiot from "./Dispositivoiot";
 import Producto from "./Producto";
 import { Login } from "./Public/Login";
 import Productos from "./Productos";
@@ -90,6 +90,7 @@ export const NavTabsHome = () => {
           headerStyle: {
             backgroundColor: "#9ad4ff", // Establece el color de fondo del header
           },
+
           headerTitleAlign: "center", // Centra el título en el encabezado
           tabBarIcon: () => (
             <FontAwesome name="home" size={30} color={"#001449"} />
@@ -112,7 +113,7 @@ export const NavTabsHome = () => {
       />
       <TabsH.Screen
         name="Dispensador"
-        component={StackIot}
+        component={Dispositivoiot}
         options={{
           headerStyle: {
             backgroundColor: "#9ad4ff",
@@ -139,7 +140,8 @@ export const NavTabsHome = () => {
     </TabsH.Navigator>
   );
 };
-export const StackIot = () => {
+{
+  /*export const StackIot = () => {
   return (
     <StackP.Navigator>
       <StackP.Screen
@@ -154,7 +156,8 @@ export const StackIot = () => {
       />
     </StackP.Navigator>
   );
-};
+};*/
+}
 //navegacion de productos a producto detalle
 export const StackProductos = () => {
   return (
